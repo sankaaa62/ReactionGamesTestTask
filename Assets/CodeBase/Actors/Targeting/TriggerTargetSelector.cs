@@ -8,7 +8,7 @@ namespace CodeBase.Actors.Targeting
     {
         public override event Action TargetChangedEvent;
         
-        [SerializeField] private TriggerObserver _triggerObserver;
+        [SerializeField] private TriggerObserver _targetTrigger;
         [SerializeField] private FriendOrFoeSystem _friendOrFoeSystem;
         
         private Transform _target;
@@ -18,7 +18,7 @@ namespace CodeBase.Actors.Targeting
             get => _target;
             protected set
             {
-                if (Equals(_target, value))
+                if (_target == value)
                     return;
                 
                 _target = value;
@@ -28,23 +28,23 @@ namespace CodeBase.Actors.Targeting
         
         private void Awake()
         {
-            _triggerObserver.TriggerEnterEvent += OnTriggerEnter;
-            _triggerObserver.TriggerExitEvent += OnTriggerExit;
+            _targetTrigger.TriggerEnterEvent += OnTargetTriggerEnter;
+            _targetTrigger.TriggerExitEvent += OnTargetTriggerExit;
         }
 
         private void OnDestroy()
         {
-            _triggerObserver.TriggerEnterEvent -= OnTriggerEnter;
-            _triggerObserver.TriggerExitEvent -= OnTriggerExit;
+            _targetTrigger.TriggerEnterEvent -= OnTargetTriggerEnter;
+            _targetTrigger.TriggerExitEvent -= OnTargetTriggerExit;
         }
         
-        private void OnTriggerEnter(Collider other)
+        private void OnTargetTriggerEnter(Collider other)
         {
             if (_friendOrFoeSystem.IsFoe(other.transform)) 
                 Target = other.transform;
         }
 
-        private void OnTriggerExit(Collider other)
+        private void OnTargetTriggerExit(Collider other)
         {
             if (Equals(Target, other.transform)) 
                 Target = null;

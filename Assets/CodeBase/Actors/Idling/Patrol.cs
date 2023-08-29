@@ -25,16 +25,35 @@ namespace CodeBase.Actors.Idling
 
         private void OnEnable()
         {
+            if (IsNoPoints()) 
+                return;
+            
             MoveToSelectedPoint();
         }
 
         private void Update()
         {
+            if (IsNoPoints()) 
+                return;
+            
             if (!IsTargetReached())
                 return;
             
             SelectNextPoint();
             MoveToSelectedPoint();
+        }
+
+        private bool IsNoPoints()
+        {
+            return _points == null || _points.Length == 0;
+        }
+
+        public void SetPoints(Transform[] points)
+        {
+            _points = points;
+            
+            if (enabled)
+                MoveToSelectedPoint();
         }
 
         private void MoveToSelectedPoint()

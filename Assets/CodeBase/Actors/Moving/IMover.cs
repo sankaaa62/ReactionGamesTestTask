@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-
-namespace CodeBase.Actors.Moving
+﻿namespace CodeBase.Actors.Moving
 {
     public interface IMover
     {
-        public void Move(Vector3 direction);
+        public float Speed { get; set; }
+        public float AngularSpeed { get; set; }
     }
 }

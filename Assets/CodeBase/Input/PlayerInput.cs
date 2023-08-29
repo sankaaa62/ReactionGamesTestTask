@@ -5,15 +5,15 @@ namespace CodeBase.Input
 {
     public class PlayerInput : MonoBehaviour
     {
-        private IMover _mover;
+        private IDirectedMover _directedMover;
         private PlayerInputActions _inputActions;
         private Vector3 _moveDirection;
         private Camera _camera;
 
         private void Construct()
         {
-            _mover = GetComponent<IMover>();
-            if (_mover == null) 
+            _directedMover = GetComponent<IDirectedMover>();
+            if (_directedMover == null) 
                 Debug.LogError("The component implementing the interface <IMover> was not found.");
             
             _inputActions = new PlayerInputActions();
@@ -33,7 +33,7 @@ namespace CodeBase.Input
             _moveDirection.y = 0f;
             _moveDirection.Normalize();
             
-            _mover.Move(_moveDirection);
+            _directedMover.Move(_moveDirection);
         }
     }
 }

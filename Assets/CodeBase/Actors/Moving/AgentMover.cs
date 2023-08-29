@@ -4,11 +4,8 @@ using UnityEngine.AI;
 namespace CodeBase.Actors.Moving
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class AgentMover : MonoBehaviour, IMover, IToPointMover
+    public class AgentMover : MonoBehaviour, IDirectedMover, IToPointMover
     {
-        [SerializeField] private float _speed = 8;
-        [SerializeField] private float _angularSpeed = 360;
-
         private NavMeshAgent _agent;
         private Vector3 _velocity;
         private bool _isInitialized;
@@ -19,14 +16,24 @@ namespace CodeBase.Actors.Moving
             {
                 if (!_isInitialized)
                     Initialize();
-                
                 return _agent;
             }
         }
-        
+        public float Speed
+        {
+            get => Agent.speed;
+            set => Agent.speed = value;
+        }
+        public float AngularSpeed
+        {
+            get => Agent.angularSpeed;
+            set => Agent.angularSpeed = value;
+        }
+
         private void Initialize()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _isInitialized = true;
         }
 
         private void OnEnable()
@@ -45,9 +52,7 @@ namespace CodeBase.Actors.Moving
                 return;
 
             RotateTo(direction);
-
-            _velocity = direction * _speed;
-            Agent.Move(_velocity * Time.deltaTime);
+            Agent.Move(direction * (Speed * Time.deltaTime));
         }
 
         private void RotateTo(Vector3 direction)
@@ -55,7 +60,7 @@ namespace CodeBase.Actors.Moving
             transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
                 Quaternion.LookRotation(direction),
-                _angularSpeed * Time.deltaTime);
+                AngularSpeed * Time.deltaTime);
         }
 
         public void MoveToPoint(Vector3 targetPoint)

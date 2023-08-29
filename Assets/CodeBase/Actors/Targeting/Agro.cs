@@ -6,7 +6,7 @@ namespace CodeBase.Actors.Targeting
     public class Agro : MonoBehaviour
     {
         [SerializeField] private TargetSelector _targetSelector;
-        [SerializeField] private Follow _follow;
+        [SerializeField] private Follower _follower;
 
         private void Awake()
         {
@@ -40,22 +40,27 @@ namespace CodeBase.Actors.Targeting
 
         private void RefreshAgroStatus()
         {
-            if (_targetSelector.Target == null)
-                SwitchAgroFalse();
-            else
+            if (HasTarget())
                 SwitchAgroTrue();
+            else
+                SwitchAgroFalse();
+        }
+
+        private bool HasTarget()
+        {
+            return _targetSelector.Target != null;
         }
 
         private void SwitchAgroFalse()
         {
-            _follow.Target = null;
-            _follow.enabled = false;
+            _follower.Target = null;
+            _follower.enabled = false;
         }
 
         private void SwitchAgroTrue()
         {
-            _follow.Target = _targetSelector.Target;
-            _follow.enabled = true;
+            _follower.Target = _targetSelector.Target;
+            _follower.enabled = true;
         }
     }
 }

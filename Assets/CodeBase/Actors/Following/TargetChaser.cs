@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CodeBase.Actors.Following
 {
-    public class ChaseToTarget : Follow
+    public class TargetChaser : Follower
     {
         [SerializeField] private float _stoppingDistance = 0;
 
@@ -13,7 +13,7 @@ namespace CodeBase.Actors.Following
         {
             _toPointMover = GetComponent<IToPointMover>();
             if (_toPointMover == null) 
-                Debug.LogError("The component implementing the interface <IToPointMover> was not found.");
+                Debug.LogError("ToPointMover was not found.");
         }
 
         private void Awake()
@@ -23,10 +23,8 @@ namespace CodeBase.Actors.Following
 
         private void Update()
         {
-            if (Target == null)
-                return;
-            
-            Chase();
+            if (HasTarget())
+                Chase();
         }
 
         private void Chase()
@@ -35,6 +33,11 @@ namespace CodeBase.Actors.Following
                 _toPointMover.MoveToPoint(Target.position);
             else
                 _toPointMover.StopMove();
+        }
+
+        private bool HasTarget()
+        {
+            return Target != null;
         }
 
         private bool IsTargetReached()

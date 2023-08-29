@@ -2,7 +2,7 @@
 
 namespace CodeBase.Actors.Following
 {
-    public abstract class Follow : MonoBehaviour
+    public abstract class Follower : MonoBehaviour
     {
         public Transform Target { get; set; }
     }
